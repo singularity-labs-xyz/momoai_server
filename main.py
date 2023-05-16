@@ -1,6 +1,23 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+import os
+from dotenv import load_dotenv
+
+env = os.getenv("ENV", "dev")
+
+if env == "dev":
+    load_dotenv("config/.env.dev")
+elif env == "prod":
+    load_dotenv("config/.env.prod")
+else:
+    raise Exception(f"Unknown environment {env}")
+
+from momoai_core.src import managers
+from momoai_core.src.chains import *
+
+chain_manager = managers.ChainManager()
+
 app = FastAPI()
 
 class Msg(BaseModel):
@@ -10,6 +27,10 @@ class Msg(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "Hello World. Welcome to FastAPI!"}
+
+@app.get("/test")
+async def test():
+    return(chain_manager.default_chains["llm"].run("respond with hello."))
 
 
 @app.get("/path")

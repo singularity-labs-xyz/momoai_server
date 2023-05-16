@@ -1,0 +1,3 @@
+[submodule "momoai_core"]
+	path = momoai_core
+	url = https://github.com/singularity-labs-xyz/momoai_core.git
