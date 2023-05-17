@@ -1,21 +1,10 @@
 from fastapi import APIRouter
-from momoai_core import managers
-from momoai_core import chains
+from main import chain_manager
+from main import document_manager
 
-chain_manager = managers.ChainManager()
-document_manager = managers.DocumentManager()
 
 router = APIRouter(prefix="/core")
 
-@router.get("/")
-def core():
-    return {"message": "core"}
-
-
-@router.get("/upload")
-def upload():
-    pass
-
-@router.get("/llm/{inp}")
+@router.get("/llm/{inp}", response_model=None)
 def llm(inp: str):
-    return chain_manager.default_chains["llm"].run(inp)
+    return {"message": chain_manager.default_chains["llm"].run(inp)}

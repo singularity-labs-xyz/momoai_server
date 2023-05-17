@@ -1,16 +1,27 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from utils import load_env
 
-load_env()
 
 app = FastAPI()
 
-# import routes
+# Load environment
+load_env()
+
+# Import managers
+from momoai_core import ChainManager, DocumentManager
+
+# Init utility classes
+global chain_manager
+global document_manager
+
+chain_manager = ChainManager()
+document_manager = DocumentManager()
+
+# Import routes
 from routes import users
 from routes import core
 
-# routes
+# Mount routes
 app.include_router(users.router)
 app.include_router(core.router)
 
