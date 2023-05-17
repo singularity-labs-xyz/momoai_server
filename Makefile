@@ -5,5 +5,5 @@ run-dev:
 run-prod:
 	export ENV=prod && uvicorn main:app --reload
 
-update-core:
+update:
 	git submodule update --remote
