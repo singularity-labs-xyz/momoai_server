@@ -8,7 +8,7 @@ document_manager = managers.DocumentManager()
 router = APIRouter(prefix="/core")
 
 @router.get("/")
-def users():
+def core():
     return {"message": "core"}
 
 
