@@ -1,6 +1,8 @@
 import logging
 import os
+
 from dotenv import load_dotenv
+
 
 def load_env():
     env = os.getenv("ENV", "dev")
