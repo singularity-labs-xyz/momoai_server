@@ -6,7 +6,6 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
-from langchain.callbacks.base import AsyncCallbackHandler
 from langchain.callbacks import AsyncIteratorCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
