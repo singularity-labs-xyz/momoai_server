@@ -6,16 +6,9 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import DeepLake
 from utils import load_env
 
-# Load Environment
 load_env()
 
 app = FastAPI()
-
-# Configure CORS
-origins = [
-    "http://localhost",
-    "http://localhost:3000",  # Add your Next.js app's URL here
-]
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,9 +28,9 @@ async def startup():
     # Initialize utility classes
     from momoai_core import DocumentManager, GCSClient, MongoDBClient
     mongo = MongoDBClient(os.getenv("MONGO_HOST"), int(os.getenv("MONGO_PORT")), username=os.getenv("MONGO_USER"), password=os.getenv("MONGO_PASSWORD"), db_name=os.getenv("DB"))
-    deeplake = DeepLake(dataset_path="deeplake", embedding_function=OpenAIEmbeddings())
-    gcs = GCSClient(os.getenv("GCS_BUCKET"))
-    document_manager = DocumentManager(gcs=gcs, vector_store=deeplake)
+    vector_store = DeepLake(dataset_path="deeplake", embedding_function=OpenAIEmbeddings())
+    gcs_client = GCSClient(bucket_name="momo-ai")
+    document_manager = DocumentManager(gcs_client=gcs_client, vector_store=vector_store)
 
     # Mount routes
     from routes import users, chain
