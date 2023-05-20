@@ -5,7 +5,7 @@ from main import mongo, document_manager
 from momoai_core import MongoCollections, DocumentMetadata, logging
 
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/user")
 
 @router.get("/")
 def getUsers():

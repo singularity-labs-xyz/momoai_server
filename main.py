@@ -33,8 +33,8 @@ async def startup():
     document_manager = DocumentManager(gcs_client=gcs_client, vector_store=vector_store)
 
     # Mount routes
-    from routes import users, chain
-    app.include_router(users.router)
+    from routes import user, chain
+    app.include_router(user.router)
     app.include_router(chain.router)
 
 @app.get("/")
