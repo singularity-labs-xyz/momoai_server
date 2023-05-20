@@ -19,7 +19,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,9 +40,9 @@ async def startup():
     document_manager = DocumentManager(gcs=gcs, vector_store=deeplake)
 
     # Mount routes
-    from routes import users, core
+    from routes import users, chain
     app.include_router(users.router)
-    app.include_router(core.router)
+    app.include_router(chain.router)
 
 @app.get("/")
 async def root():

@@ -1,6 +1,8 @@
+from fastapi import Body
 import asyncio
 import uuid
 from time import sleep
+from pydantic import BaseModel
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
@@ -10,12 +12,14 @@ from main import document_manager
 
 from momoai_core import chains, logging
 
-router = APIRouter(prefix="/core")
+router = APIRouter(prefix="/chain")
 
+class Message(BaseModel):
+    message: str
 
-@router.get("/llm/{inp}", response_model=None)
-async def llm(inp: str):
+@router.post("/llm/", response_model=None)
+async def llm(message: Message = Body(...)):
     handler = AsyncIteratorCallbackHandler()
     llm_chain = chains.LLMChain(llm=ChatOpenAI(verbose=True, streaming=True, callbacks=[handler]))
-    asyncio.create_task(llm_chain.arun(inp))
+    asyncio.create_task(llm_chain.arun(message.message))
     return StreamingResponse(handler.aiter())
