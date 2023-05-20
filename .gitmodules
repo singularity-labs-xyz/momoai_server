@@ -1,3 +1,4 @@
 [submodule "momoai_core"]
+	branch = main
 	path = momoai_core
 	url = https://github.com/singularity-labs-xyz/momoai_core.git
