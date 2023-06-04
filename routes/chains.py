@@ -14,7 +14,7 @@ from momoai_core import chains, logging, DocumentMetadata
 
 from typing import List
 
-router = APIRouter(prefix="/chain")
+router = APIRouter(prefix="/chains")
 
 class LLMRequestArgs(BaseModel):
     message: str
@@ -23,7 +23,7 @@ class LLMRequestArgs(BaseModel):
 async def llm(args: LLMRequestArgs = Body(...)):
     handler = AsyncIteratorCallbackHandler()
     llm_chain = chains.LLMChain(llm=ChatOpenAI(verbose=True, streaming=True, callbacks=[handler], max_tokens=4000))
-    asyncio.create_task(llm_chain.arun(LLMRequestArgs.message))
+    asyncio.create_task(llm_chain.arun(args.message))
     return StreamingResponse(handler.aiter())
 
 class CRRequestArgs(BaseModel):
