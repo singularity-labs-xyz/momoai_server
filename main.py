@@ -22,8 +22,9 @@ app.add_middleware(
 async def startup():
     # Define utility classes
     global mongo
-    global gcs
+    global gcs_client
     global document_manager
+    global session
 
     # Initialize utility classes
     from momoai_core import DocumentManager, GCSClient, MongoDBClient
@@ -31,12 +32,20 @@ async def startup():
     vector_store = DeepLake(dataset_path="deeplake", embedding_function=OpenAIEmbeddings())
     gcs_client = GCSClient(bucket_name="momo-ai")
     document_manager = DocumentManager(gcs_client=gcs_client, vector_store=vector_store)
+    from database import db_connection
+    session = db_connection.SessionLocal()
 
     # Mount routes
-    from routes import users, chains, documents
+    from routes import users, chains, documents, schools
     app.include_router(users.router)
+    app.include_router(schools.router)
     app.include_router(chains.router)
     app.include_router(documents.router)
+
+@app.on_event("shutdown")
+async def shutdown():
+    pass
+    # await database.disconnect()
 
 @app.get("/")
 async def root():
