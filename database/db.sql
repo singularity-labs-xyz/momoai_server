@@ -37,32 +37,6 @@ CREATE TABLE user_courses (
     FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
--- Create the "documents" table
-CREATE TABLE documents (
-    id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type VARCHAR(100) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    class_id UUID,
-    assignment_id UUID,
-    user_id UUID,
-    FOREIGN KEY (class_id) REFERENCES courses(id),
-    FOREIGN KEY (assignment_id) REFERENCES assignments(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
--- Create the "events" table
-CREATE TABLE events (
-    id UUID PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    description TEXT,
-    end_time TIMESTAMP,
-    priority INTEGER,
-    course_id UUID,
-    FOREIGN KEY (course_id) REFERENCES courses(id)
-);
-
 -- Create the "assignments" table
 CREATE TABLE assignments (
     id UUID PRIMARY KEY,
@@ -72,7 +46,37 @@ CREATE TABLE assignments (
     priority INTEGER,
     completed BOOLEAN,
     course_id UUID NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES courses(id)
+    user_id UUID NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create the "documents" table
+CREATE TABLE documents (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(100) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    course_id UUID,
+    assignment_id UUID,
+    user_id UUID,
+    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (assignment_id) REFERENCES assignments(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Create the "events" table
+CREATE TABLE events (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    description TEXT,
+    priority INTEGER,
+    course_id UUID,
+    user_id UUID NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Create the "tasks" table
@@ -86,7 +90,9 @@ CREATE TABLE tasks (
     assignment_id UUID,
     course_id UUID,
     event_id UUID,
+    user_id UUID NOT NULL,
     FOREIGN KEY (assignment_id) REFERENCES assignments(id),
     FOREIGN KEY (course_id) REFERENCES courses(id),
-    FOREIGN KEY (event_id) REFERENCES events(id)
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -10,7 +10,6 @@ def add_school(id: str, name: str):
     school = School(id=id, name=name)
     session.add(school)
     session.commit()
-
     return school
 
 def delete_school(id: str):

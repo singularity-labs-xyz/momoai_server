@@ -59,6 +59,20 @@ class UserCourse(Base):
     user = relationship("User")
     course = relationship("Course")
 
+class Assignment(Base):
+    __tablename__ = 'assignments'
+
+    id = Column(String, primary_key=True)
+    name = Column(String(100), nullable=False)
+    due_date = Column(TIMESTAMP, nullable=False)
+    description = Column(Text)
+    priority = Column(Integer)
+    completed = Column(Boolean)
+    course_id = Column(String, ForeignKey('courses.id'))
+    user_id = Column(String, ForeignKey('users.id'))
+    course = relationship("Course")
+    user = relationship("User")
+
 
 class Document(Base):
     __tablename__ = 'documents'
@@ -81,24 +95,13 @@ class Event(Base):
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
     start_time = Column(TIMESTAMP, nullable=False)
-    description = Column(Text)
     end_time = Column(TIMESTAMP)
-    priority = Column(Integer)
-    course_id = Column(String, ForeignKey('courses.id'))
-    course = relationship("Course")
-
-
-class Assignment(Base):
-    __tablename__ = 'assignments'
-
-    id = Column(String, primary_key=True)
-    name = Column(String(100), nullable=False)
-    due_date = Column(TIMESTAMP, nullable=False)
     description = Column(Text)
     priority = Column(Integer)
-    completed = Column(Boolean)
     course_id = Column(String, ForeignKey('courses.id'))
+    user_id = Column(String, ForeignKey('users.id'))
     course = relationship("Course")
+    user = relationship("User")
 
 
 class Task(Base):
@@ -113,6 +116,8 @@ class Task(Base):
     assignment_id = Column(String, ForeignKey('assignments.id'))
     course_id = Column(String, ForeignKey('courses.id'))
     event_id = Column(String, ForeignKey('events.id'))
+    user_id = Column(String, ForeignKey('users.id'))
     assignment = relationship("Assignment")
     course = relationship("Course")
     event = relationship("Event")
+    user = relationship("User")

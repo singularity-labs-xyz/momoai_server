@@ -36,11 +36,16 @@ async def startup():
     session = db_connection.SessionLocal()
 
     # Mount routes
-    from routes import users, chains, documents, schools
+    from routes import users, chains, documents, schools, tasks, events, courses, assignments
     app.include_router(users.router)
     app.include_router(schools.router)
     app.include_router(chains.router)
     app.include_router(documents.router)
+    app.include_router(tasks.router)
+    app.include_router(events.router)
+    app.include_router(courses.router)
+    app.include_router(assignments.router)
+
 
 @app.on_event("shutdown")
 async def shutdown():

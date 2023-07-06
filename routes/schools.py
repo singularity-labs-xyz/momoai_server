@@ -8,7 +8,7 @@ from controllers import school_controller
 router = APIRouter(prefix="/schools")
 
 @router.get("/{school_id}")
-def getUsers(school_id: str):
+def getSchool(school_id: str):
     school = school_controller.get_school(id=school_id)
 
     return {

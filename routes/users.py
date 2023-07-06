@@ -8,7 +8,7 @@ from controllers import user_controller
 router = APIRouter(prefix="/users")
 
 @router.get("/{user_id}")
-def getUsers(user_id: str):
+def getUser(user_id: str):
     user = user_controller.get_user(id=user_id)
     return {
         "id": user.id,
