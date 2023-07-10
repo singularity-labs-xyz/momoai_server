@@ -18,8 +18,8 @@ def getAssignment(assignment_id: str):
         "date": assignment.date,
         "description": assignment.description,
         "priority": assignment.priority,
-        "completed": assignment.completed,
-        "course_id": assignment.course_id,
+        "status": assignment.status,
+        "section_id": assignment.section_id,
         "event_id": assignment.event_id,
         "user_id": assignment.user_id,
     }
@@ -29,13 +29,22 @@ class AddAssignmentRequestArgs(BaseModel):
     date: datetime
     description: str
     priority: int
-    course_id: str
+    section_id: str
     event_id: str
     user_id: str
 
 @router.post("/add")
 def addAssignment(body: AddAssignmentRequestArgs):
-    assignment = assignment_controller.add_assignment(id=str(uuid.uuid4()), name=body.name, due_date=body.date, description=body.description, priority=body.priority, course_id=body.course_id, event_id=body.event_id, user_id=body.user_id)
+    assignment = assignment_controller.add_assignment(
+        id=str(uuid.uuid4()), 
+        name=body.name, 
+        due_date=body.date, 
+        description=body.description, 
+        priority=body.priority, 
+        section_id=body.section_id, 
+        event_id=body.event_id, 
+        user_id=body.user_id
+    )
     logging.info(f"Added assignment {assignment.name} with id {assignment.id}")
 
     return{
@@ -44,8 +53,8 @@ def addAssignment(body: AddAssignmentRequestArgs):
         "date": assignment.due_date,
         "description": assignment.description,
         "priority": assignment.priority,
-        "completed": assignment.completed,
-        "course_id": assignment.course_id,
+        "status": assignment.status,
+        "section_id": assignment.section_id,
         "user_id": assignment.user_id
     }
 

@@ -19,7 +19,7 @@ def getEvent(event_id: str):
         "description": event.description,
         "priority": event.priority,
         "completed": event.completed,
-        "course_id": event.course_id,
+        "section_id": event.section_id,
         "user_id": event.user_id,
     }
 
@@ -29,12 +29,22 @@ class AddEventRequestArgs(BaseModel):
     end_time: datetime
     description: str
     priority: int
-    course_id: str = None
+    section_id: str = None
     user_id: str
 
 @router.post("/add")
 def addEvent(body: AddEventRequestArgs):
-    event = event_controller.add_event(id=str(uuid.uuid4()), name=body.name, start_time=body.start_time, end_time=body.end_time, description=body.description, priority=body.priority, course_id=body.course_id, user_id=body.user_id)
+    event = event_controller.add_event(
+        id=str(uuid.uuid4()), 
+        name=body.name, 
+        start_time=body.start_time, 
+        end_time=body.end_time, 
+        description=body.description, 
+        priority=body.priority, 
+        section_id=body.section_id, 
+        user_id=body.user_id
+    )
+    
     logging.info(f"Added event {event.name} with id {event.id}")
 
     return{
@@ -44,7 +54,7 @@ def addEvent(body: AddEventRequestArgs):
         "end_time": event.end_time,
         "description": event.description,
         "priority": event.priority,
-        "course_id": event.course_id,
+        "section_id": event.section_id,
         "user_id": event.user_id
     }
 

@@ -1,5 +1,11 @@
+-- Create section_enum type
+CREATE TYPE section_enum AS ENUM ('Lecture', 'Discussion', 'Quiz');
+
+-- Create status_enum type
+CREATE TYPE status_enum AS ENUM ('TODO', 'IN_PROGRESS', 'COMPLETE');
+
 -- Create the "school" table
-CREATE TABLE school (
+CREATE TABLE schools (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
@@ -12,7 +18,7 @@ CREATE TABLE users (
     email VARCHAR(100),
     password VARCHAR(100),
     school_id UUID NOT NULL,
-    FOREIGN KEY (school_id) REFERENCES school(id)
+    FOREIGN KEY (school_id) REFERENCES schools(id)
 );
 
 -- Create the "courses" table
@@ -21,33 +27,52 @@ CREATE TABLE courses (
     course_code VARCHAR(100) NOT NULL,
     name VARCHAR(100) NOT NULL,
     department VARCHAR(100) NOT NULL,
-    professor_name VARCHAR(100),
-    professor_email VARCHAR(100),
     description TEXT,
+    units DOUBLE PRECISION,
     school_id UUID NOT NULL,
-    FOREIGN KEY (school_id) REFERENCES school(id)
+    FOREIGN KEY (school_id) REFERENCES schools(id)
 );
 
--- Create the "user_courses" table
-CREATE TABLE user_courses (
+-- Create the "sections" table
+CREATE TABLE sections (
     id UUID PRIMARY KEY,
-    user_id UUID NOT NULL,
+    section_id VARCHAR(100) NOT NULL,
+    section_type section_enum NOT NULL,
+    days VARCHAR(100) NOT NULL,
+    start_time TIMESTAMP NOt NULL,
+    end_time TIMESTAMP NOT NULL,
+    instructor_first_name VARCHAR(100) NOT NULL,
+    instructor_last_name VARCHAR(100) NOT NULL,
+    instructor_email VARCHAR(100),
+    description TEXT,
+    grading_scale TEXT,
+    location VARCHAR(100),
     course_id UUID NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (course_id) REFERENCES courses(id)
 );
+
+-- Create the "user_sections" table
+CREATE TABLE user_sections (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    section_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (section_id) REFERENCES sections(id)
+);
+
+
 
 -- Create the "assignments" table
 CREATE TABLE assignments (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     due_date TIMESTAMP NOT NULL,
+    status status_enum NOT NULL,
     description TEXT,
     priority INTEGER,
-    completed BOOLEAN,
-    course_id UUID NOT NULL,
+    section_id UUID NOT NULL,
     user_id UUID NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (section_id) REFERENCES sections(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -57,10 +82,10 @@ CREATE TABLE documents (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
     url VARCHAR(255) NOT NULL,
-    course_id UUID,
+    section_id UUID,
     assignment_id UUID,
     user_id UUID,
-    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (section_id) REFERENCES sections(id),
     FOREIGN KEY (assignment_id) REFERENCES assignments(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -73,9 +98,9 @@ CREATE TABLE events (
     end_time TIMESTAMP,
     description TEXT,
     priority INTEGER,
-    course_id UUID,
+    section_id UUID,
     user_id UUID NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (section_id) REFERENCES sections(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -84,15 +109,15 @@ CREATE TABLE tasks (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     date TIMESTAMP NOT NULL,
+    status status_enum NOT NULL,
     description TEXT,
     priority INTEGER,
-    completed BOOLEAN,
     assignment_id UUID,
-    course_id UUID,
+    section_id UUID,
     event_id UUID,
     user_id UUID NOT NULL,
     FOREIGN KEY (assignment_id) REFERENCES assignments(id),
-    FOREIGN KEY (course_id) REFERENCES courses(id),
+    FOREIGN KEY (section_id) REFERENCES sectionss(id),
     FOREIGN KEY (event_id) REFERENCES events(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -1,12 +1,24 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from typing import float
+from enum import Enum
 
 Base = declarative_base()
 
+class section_enum(Enum):
+    Lecture = "Lecture"
+    Discussion = "Discussion"
+    Quiz = "Quiz"
+
+class status_enum(Enum):
+    TODO = "TODO"
+    INPROGRESS = "INPROGRESS"
+    COMPLETE = "COMPLETE"
+
 
 class School(Base):
-    __tablename__ = 'school'
+    __tablename__ = 'schools'
 
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
@@ -24,7 +36,7 @@ class User(Base):
     last_name = Column(String(100))
     email = Column(String(100))
     password = Column(String(100))
-    school_id = Column(String, ForeignKey('school.id'))
+    school_id = Column(String, ForeignKey('schools.id'))
     school = relationship("School")
 
     def __init__(self, id: str, first_name: str, last_name: str, email: str, password: str, school_id: str):
@@ -43,21 +55,38 @@ class Course(Base):
     course_code = Column(String(100), nullable=False)
     name = Column(String(100), nullable=False)
     department = Column(String(100), nullable=False)
-    professor_name = Column(String(100))
-    professor_email = Column(String(100))
     description = Column(Text)
+    units = Column(float)
     school_id = Column(String, ForeignKey('school.id'))
     school = relationship("School")
 
+class Section(Base):
+    __tablename__ = 'sections'
 
-class UserCourse(Base):
-    __tablename__ = 'user_courses'
+    id = Column(String, primary_key=True)
+    section_id = Column(String(100), nullable=False)
+    section_type = Column(section_enum, nullable=False)
+    days = Column(String(100), nullable=False)
+    start_time = Column(TIMESTAMP, nullable=False)
+    end_time = Column(TIMESTAMP, nullable=False)
+    instructor_first_name = Column(String(100), nullable=False)
+    instructor_last_name = Column(String(100), nullable=False)
+    instructor_email = Column(String(100))
+    description = Column(Text)
+    grading_scale = Column(Text)
+    location = Column(String(100))
+    course_id = Column(String, ForeignKey('courses.id'))
+    course = relationship("Course")
+
+
+class UserSection(Base):
+    __tablename__ = 'user_sections'
 
     id = Column(String, primary_key=True)
     user_id = Column(String, ForeignKey('users.id'))
-    course_id = Column(String, ForeignKey('courses.id'))
+    section_id = Column(String, ForeignKey('sections.id'))
     user = relationship("User")
-    course = relationship("Course")
+    section = relationship("Section")
 
 class Assignment(Base):
     __tablename__ = 'assignments'
@@ -65,12 +94,12 @@ class Assignment(Base):
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
     due_date = Column(TIMESTAMP, nullable=False)
+    status = Column(status_enum, nullable=False)
     description = Column(Text)
     priority = Column(Integer)
-    completed = Column(Boolean)
-    course_id = Column(String, ForeignKey('courses.id'))
+    section_id = Column(String, ForeignKey('sections.id'))
     user_id = Column(String, ForeignKey('users.id'))
-    course = relationship("Course")
+    section= relationship("Section")
     user = relationship("User")
 
 
@@ -81,10 +110,10 @@ class Document(Base):
     name = Column(String(255), nullable=False)
     type = Column(String(100), nullable=False)
     url = Column(String(255), nullable=False)
-    class_id = Column(String, ForeignKey('courses.id'))
+    section_id = Column(String, ForeignKey('sections.id'))
     assignment_id = Column(String, ForeignKey('assignments.id'))
     user_id = Column(String, ForeignKey('users.id'))
-    course = relationship("Course")
+    section = relationship("Section")
     assignment = relationship("Assignment")
     user = relationship("User")
 
@@ -98,9 +127,9 @@ class Event(Base):
     end_time = Column(TIMESTAMP)
     description = Column(Text)
     priority = Column(Integer)
-    course_id = Column(String, ForeignKey('courses.id'))
+    section_id = Column(String, ForeignKey('sections.id'))
     user_id = Column(String, ForeignKey('users.id'))
-    course = relationship("Course")
+    section = relationship("Section")
     user = relationship("User")
 
 
@@ -110,14 +139,14 @@ class Task(Base):
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
     date = Column(TIMESTAMP, nullable=False)
+    status = Column(status_enum, nullable=False)
     description = Column(Text)
     priority = Column(Integer)
-    completed = Column(Boolean)
     assignment_id = Column(String, ForeignKey('assignments.id'))
-    course_id = Column(String, ForeignKey('courses.id'))
+    section_id = Column(String, ForeignKey('sections.id'))
     event_id = Column(String, ForeignKey('events.id'))
     user_id = Column(String, ForeignKey('users.id'))
     assignment = relationship("Assignment")
-    course = relationship("Course")
+    section = relationship("Section")
     event = relationship("Event")
     user = relationship("User")

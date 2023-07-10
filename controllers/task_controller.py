@@ -1,6 +1,7 @@
 
 from main import session
 from database.models import Task
+from database.models import status_enum
 
 def get_task(id: str):
     task = session.query(Task).filter(Task.id == id).first()
@@ -12,10 +13,9 @@ def add_task(
     date: str,
     description: str,
     priority: int,
-    completed: bool,
     user_id: str,
     assignment_id: str,
-    course_id: str,
+    section_id: str,
     event_id: str,
 ):
     task = Task(
@@ -24,10 +24,10 @@ def add_task(
         date=date,
         description=description,
         priority=priority,
-        completed=completed,
+        status=status_enum.TODO,
         user_id=user_id,
         assignment_id=assignment_id,
-        course_id=course_id,
+        section_id=section_id,
         event_id=event_id,
     )
     session.add(task)

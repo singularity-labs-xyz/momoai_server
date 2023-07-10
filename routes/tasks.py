@@ -17,9 +17,9 @@ def getTask(task_id: str):
         "date": task.date,
         "description": task.description,
         "priority": task.priority,
-        "completed": task.completed,
+        "status": task.status,
         "assignment_id": task.assignment_id,
-        "course_id": task.course_id,
+        "section_id": task.section_id,
         "event_id": task.event_id,
         "user_id": task.user_id,
     }
@@ -29,15 +29,25 @@ class AddTaskRequestArgs(BaseModel):
     date: datetime
     description: str
     priority: int
-    completed: bool
     user_id: str
     assignment_id: str = None
-    course_id: str = None
+    section_id: str = None
     event_id: str = None
 
 @router.post("/add")
 def addTask(body: AddTaskRequestArgs):
-    task = task_controller.add_task(id=str(uuid.uuid4()), name=body.name, date=body.date, description=body.description, priority=body.priority, completed=body.completed ,assignment_id=body.assignment_id, course_id=body.course_id, event_id=body.event_id, user_id=body.user_id)
+    task = task_controller.add_task(
+        id=str(uuid.uuid4()), 
+        name=body.name, 
+        date=body.date, 
+        description=body.description, 
+        priority=body.priority, 
+        assignment_id=body.assignment_id, 
+        section_id=body.section_id, 
+        event_id=body.event_id, 
+        user_id=body.user_id
+    )
+
     logging.info(f"Added task {task.name} with id {task.id}")
 
     return{
@@ -46,9 +56,9 @@ def addTask(body: AddTaskRequestArgs):
         "date": task.date,
         "description": task.description,
         "priority": task.priority,
-        "completed": task.completed,
+        "status": task.status,
         "assignment_id": task.assignment_id,
-        "course_id": task.course_id,
+        "section_id": task.section_id,
         "event_id": task.event_id,
         "user_id": task.user_id
     }
