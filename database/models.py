@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, Text, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from typing import float
+from sqlalchemy.dialects.postgresql import ENUM as PGENUM
 from enum import Enum
 
 Base = declarative_base()
@@ -56,8 +56,8 @@ class Course(Base):
     name = Column(String(100), nullable=False)
     department = Column(String(100), nullable=False)
     description = Column(Text)
-    units = Column(float)
-    school_id = Column(String, ForeignKey('school.id'))
+    units = Column(Float)
+    school_id = Column(String, ForeignKey('schools.id'))
     school = relationship("School")
 
 class Section(Base):
@@ -65,7 +65,7 @@ class Section(Base):
 
     id = Column(String, primary_key=True)
     section_id = Column(String(100), nullable=False)
-    section_type = Column(section_enum, nullable=False)
+    section_type = Column(PGENUM(section_enum, name='section_enum'), nullable=False)
     days = Column(String(100), nullable=False)
     start_time = Column(TIMESTAMP, nullable=False)
     end_time = Column(TIMESTAMP, nullable=False)
@@ -94,7 +94,7 @@ class Assignment(Base):
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
     due_date = Column(TIMESTAMP, nullable=False)
-    status = Column(status_enum, nullable=False)
+    status = Column(PGENUM(status_enum, name='status_enum'), nullable=False)
     description = Column(Text)
     priority = Column(Integer)
     section_id = Column(String, ForeignKey('sections.id'))
@@ -109,7 +109,7 @@ class Document(Base):
     id = Column(String, primary_key=True)
     name = Column(String(255), nullable=False)
     type = Column(String(100), nullable=False)
-    url = Column(String(255), nullable=False)
+    url = Column(Text, nullable=False)
     section_id = Column(String, ForeignKey('sections.id'))
     assignment_id = Column(String, ForeignKey('assignments.id'))
     user_id = Column(String, ForeignKey('users.id'))
@@ -139,7 +139,7 @@ class Task(Base):
     id = Column(String, primary_key=True)
     name = Column(String(100), nullable=False)
     date = Column(TIMESTAMP, nullable=False)
-    status = Column(status_enum, nullable=False)
+    status = Column(PGENUM(status_enum, name='status_enum'), nullable=False)
     description = Column(Text)
     priority = Column(Integer)
     assignment_id = Column(String, ForeignKey('assignments.id'))

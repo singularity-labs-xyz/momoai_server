@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from momoai_core import logging
 from controllers import assignment_controller
 from datetime import datetime
+from database.models import status_enum
 
 router = APIRouter(prefix="/assignments")
 
@@ -15,22 +16,20 @@ def getAssignment(assignment_id: str):
     return {
         "id": assignment.id,
         "name": assignment.name, 
-        "date": assignment.date,
+        "due_date": assignment.due_date,
+        "status": assignment.status,
         "description": assignment.description,
         "priority": assignment.priority,
-        "status": assignment.status,
         "section_id": assignment.section_id,
-        "event_id": assignment.event_id,
         "user_id": assignment.user_id,
     }
 
 class AddAssignmentRequestArgs(BaseModel):
     name: str
-    date: datetime
+    due_date: datetime
     description: str
     priority: int
     section_id: str
-    event_id: str
     user_id: str
 
 @router.post("/add")
@@ -38,11 +37,10 @@ def addAssignment(body: AddAssignmentRequestArgs):
     assignment = assignment_controller.add_assignment(
         id=str(uuid.uuid4()), 
         name=body.name, 
-        due_date=body.date, 
+        due_date=body.due_date, 
         description=body.description, 
         priority=body.priority, 
-        section_id=body.section_id, 
-        event_id=body.event_id, 
+        section_id=body.section_id,  
         user_id=body.user_id
     )
     logging.info(f"Added assignment {assignment.name} with id {assignment.id}")
@@ -50,10 +48,10 @@ def addAssignment(body: AddAssignmentRequestArgs):
     return{
         "id": assignment.id,
         "name": assignment.name,
-        "date": assignment.due_date,
+        "due_date": assignment.due_date,
+        "status": assignment.status,
         "description": assignment.description,
         "priority": assignment.priority,
-        "status": assignment.status,
         "section_id": assignment.section_id,
         "user_id": assignment.user_id
     }

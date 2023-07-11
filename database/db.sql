@@ -81,7 +81,7 @@ CREATE TABLE documents (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
-    url VARCHAR(255) NOT NULL,
+    url TEXT NOT NULL,
     section_id UUID,
     assignment_id UUID,
     user_id UUID,
@@ -117,7 +117,7 @@ CREATE TABLE tasks (
     event_id UUID,
     user_id UUID NOT NULL,
     FOREIGN KEY (assignment_id) REFERENCES assignments(id),
-    FOREIGN KEY (section_id) REFERENCES sectionss(id),
+    FOREIGN KEY (section_id) REFERENCES sections(id),
     FOREIGN KEY (event_id) REFERENCES events(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

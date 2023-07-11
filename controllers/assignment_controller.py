@@ -16,7 +16,6 @@ def add_assignment(
     description: str, 
     priority: int, 
     section_id: str, 
-    event_id: str, 
     user_id: str
 ):
 
@@ -27,8 +26,7 @@ def add_assignment(
         description=description, 
         priority=priority, 
         status=status_enum.TODO, 
-        section_id=section_id, 
-        event_id=event_id, 
+        section_id=section_id,  
         user_id=user_id
     )
 

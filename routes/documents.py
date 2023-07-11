@@ -15,7 +15,13 @@ class UploadFileRequestArgs(BaseModel):
     assignment_id: str = None
 
 @router.post("/upload")
-async def upload_file(background_tasks: BackgroundTasks, file: UploadFile = File(...), section_id: str = Form(...), assignment_id: str = Form(...), user_id: str = Form(...), document_id: str = Form(...)):
+async def upload_file(
+    background_tasks: BackgroundTasks, 
+    file: UploadFile = File(...), 
+    user_id: str = Form(...), 
+    section_id: str = Form(None), 
+    assignment_id: str = Form(None)
+):
     document_id = str(uuid.uuid4())
     logging.info(f"Uploading file {file.filename} for user {user_id}")
     file_content = await file.read()
