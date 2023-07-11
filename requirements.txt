@@ -8,3 +8,4 @@ python-dotenv==1.0.0
 PyYAML==6.0
 PyYAML==6.0
 SQLAlchemy==1.4.47
+uvicorn==0.13.4
