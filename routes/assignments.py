@@ -56,7 +56,7 @@ def addAssignment(body: AddAssignmentRequestArgs):
         "user_id": assignment.user_id
     }
 
-@router.delete("/{school_id}")
+@router.delete("/{assignment_id}")
 def deleteAssignment(assignment_id: str):
     assignment_controller.delete_assignment(id=assignment_id)
     logging.info(f"Deleted assignment with id {assignment_id}")

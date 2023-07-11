@@ -63,7 +63,7 @@ def addTask(body: AddTaskRequestArgs):
         "user_id": task.user_id
     }
 
-@router.delete("/task_id}")
+@router.delete("/{task_id}")
 def deleteTask(task_id: str):
     task_controller.delete_task(id=task_id)
     logging.info(f"Deleted task with id {task_id}")
