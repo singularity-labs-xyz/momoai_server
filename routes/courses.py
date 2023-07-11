@@ -6,7 +6,7 @@ from momoai_core import logging
 from controllers import course_controller
 from typing import List
 from database.models import section_enum
-from datetime import datetime
+from datetime import time
 
 router = APIRouter(prefix="/courses")
 
@@ -38,8 +38,8 @@ class SectionArgs(BaseModel):
     section_id: str
     section_type: section_enum
     days: str
-    start_time: datetime
-    end_time: datetime
+    start_time: time
+    end_time: time
     instructor_first_name: str
     instructor_last_name: str
     instructor_email: str

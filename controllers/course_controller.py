@@ -1,6 +1,6 @@
 from main import session
 from database.models import Course, Section, UserSection, section_enum
-from datetime import datetime
+from datetime import time
 
 
 def get_course(course_code: str, school_id: str):
@@ -47,8 +47,8 @@ def add_section(
     section_id: str,
     section_type: section_enum,
     days: str,
-    start_time: datetime,
-    end_time: datetime,
+    start_time: time,
+    end_time: time,
     instructor_first_name: str,
     instructor_last_name: str,
     instructor_email: str,

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, Text, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, Text, TIMESTAMP, TIME
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ENUM as PGENUM
@@ -67,8 +67,8 @@ class Section(Base):
     section_id = Column(String(100), nullable=False)
     section_type = Column(PGENUM(section_enum, name='section_enum'), nullable=False)
     days = Column(String(100), nullable=False)
-    start_time = Column(TIMESTAMP, nullable=False)
-    end_time = Column(TIMESTAMP, nullable=False)
+    start_time = Column(TIME, nullable=False)
+    end_time = Column(TIME, nullable=False)
     instructor_first_name = Column(String(100), nullable=False)
     instructor_last_name = Column(String(100), nullable=False)
     instructor_email = Column(String(100))
