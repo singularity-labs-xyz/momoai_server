@@ -10,8 +10,7 @@ import os
 # Check for env environment variable
 # Load the corresponding .env file
 env = os.getenv("ENV", "dev")
-load_dotenv(f".env.{env}")
-print(f"Loaded .env.{env}")
+load_dotenv(f"config/.env.{env}")
     
 # Initialize utility classes
 session = db_connection.SessionLocal()
