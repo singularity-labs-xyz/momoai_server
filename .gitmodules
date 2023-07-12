@@ -1,4 +1,4 @@
 [submodule "bimo_core"]
 	branch = main
 	path = bimo_core
-	url = https://github.com/singularity-labs-xyz/bimo_core.git
+	url = https://github.com/singularity-xyz/bimo_core
