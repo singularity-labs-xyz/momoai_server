@@ -2,7 +2,7 @@ import uuid
 
 from pydantic import BaseModel
 from fastapi import APIRouter
-from momoai_core import logging
+from bimo_core import logging
 from controllers import assignment_controller
 from datetime import datetime
 from database.models import status_enum

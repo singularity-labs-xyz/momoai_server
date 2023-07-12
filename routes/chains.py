@@ -10,7 +10,7 @@ from langchain.callbacks import AsyncIteratorCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from main import document_manager
 
-from momoai_core import chains, logging, DocumentMetadata
+from bimo_core import chains, logging, DocumentMetadata
 
 from typing import List
 

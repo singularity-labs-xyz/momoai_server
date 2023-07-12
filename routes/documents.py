@@ -1,7 +1,7 @@
 from io import BytesIO
 from pydantic import BaseModel
 from main import document_manager
-from momoai_core import logging, DocumentMetadata
+from bimo_core import logging, DocumentMetadata
 from fastapi import APIRouter, BackgroundTasks, Body, File, Form, UploadFile
 from controllers import document_controller
 from datetime import datetime

@@ -2,7 +2,7 @@ import uuid
 
 from pydantic import BaseModel
 from fastapi import APIRouter
-from momoai_core import logging
+from bimo_core import logging
 from controllers import school_controller
 
 router = APIRouter(prefix="/schools")
